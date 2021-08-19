@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+table, 
+td 
+{
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 8px 14px;
+}
+
+
+.die {
+    background: white;
+    color: white;
+}
+
+.live {
+    background-color: black;
+}

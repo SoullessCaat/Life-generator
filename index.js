@@ -1,10 +1,28 @@
-function createGrid(width, heigth) {
-  let arr = [];
+let table = document.createElement('table');
+let tableC = document.createElement('table');
+let tableBody = document.createElement('tbody');
+let tableCBody = document.createElement('tbody');
+table.appendChild(tableBody);
+tableC.appendChild(tableCBody);
+
+function createGrid(width, heigth) { // Создаём перву доску 
+  let arr = []; 
   for (i = 0; i < width; i++) {
     arr[i] = [];
-    for (j = 0; j < heigth; j++) {
-      arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
+    let tr = document.createElement('tr');
+    tableBody.appendChild(tr); {
+      for (j = 0; j < heigth; j++) {
+        arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
+        let td = document.createElement('td');
+        td.innerHTML = arr[i][j];
+        if (arr[i][j] === 1) {
+          td.className = 'live';
+        } else {
+          td.className = 'die';
+        }
+        tr.appendChild(td)
     };
+    }
   };
   return arr;
 };
@@ -83,10 +101,14 @@ function createGridTwo() {
   for (let i = 0; i < mat.length; i++) {
     newArray.push(i);
     newArray[i] = [];
-    for (let j = 0; j < mat[i].length; j++) {
-      newArray[i].push(j);
-      let neib = findingNeighbors(mat, i, j);
-      var count = neib.filter(el => { return el == 1}).reduce((el, count) =>  el + count);
+    let trC = document.createElement('tr');
+    tableCBody.appendChild(trC); {
+      for (let j = 0; j < mat[i].length; j++) {
+        newArray[i].push(j);
+        
+        let neib = findingNeighbors(mat, i, j);
+        let filt = neib.filter(el => el == 1)
+        let count = filt.reduce((count, acc) => count + acc);
         if (mat[i][j] == 1) {
           if (count == 2 || count == 3) {
             newArray[i][j] = 1;
@@ -100,8 +122,23 @@ function createGridTwo() {
           } else {
             newArray[i][j] = 0;
           }
+        };
+        let tdC = document.createElement('td');
+        tdC.innerHTML = newArray[i][j];
+        if (newArray[i][j] === 1) {
+          tdC.className = 'live';
+        } else {
+          tdC.className = 'die';
         }
-    }
-  }
+        trC.appendChild(tdC);
+      };
+    };
+  };
   return newArray;
 }
+
+console.log(mat)
+console.log(createGridTwo())
+document.body.appendChild(table);
+document.body.appendChild(tableC)
+
