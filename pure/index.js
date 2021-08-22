@@ -1,35 +1,42 @@
 let table = document.createElement('table');
 let tableC = document.createElement('table');
+let tableB = document.createElement('table');
 let tableBody = document.createElement('tbody');
 let tableCBody = document.createElement('tbody');
+let tableBBody = document.createElement('tbody');
 table.appendChild(tableBody);
 tableC.appendChild(tableCBody);
+tableB.appendChild(tableBBody);
 
-function createGrid(width, heigth) { // Создаём перву доску 
+
+const width = 10
+const heigth = 10
+
+function createGrid(width, heigth) { 
   let arr = []; 
-  for (i = 0; i < width; i++) {
+  for (let i = 0; i < width; i++) {
     arr[i] = [];
     let tr = document.createElement('tr');
-    tableBody.appendChild(tr); {
-      for (j = 0; j < heigth; j++) {
-        arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
-        let td = document.createElement('td');
-        td.innerHTML = arr[i][j];
-        if (arr[i][j] === 1) {
-          td.className = 'live';
-        } else {
-          td.className = 'die';
-        }
-        tr.appendChild(td)
+      tableBody.appendChild(tr); {
+        for (let j = 0; j < heigth; j++) {
+          arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
+          let td = document.createElement('td');
+          td.innerHTML = arr[i][j];
+          if (arr[i][j] === 1) {
+            td.className = 'live';
+          } else {
+            td.className = 'die';
+          };
+          tr.appendChild(td);
+      };
     };
-    }
   };
-  return arr;
+  return arr; 
 };
 
-let mat = createGrid(10, 10);
+let mat = createGrid(width, heigth);
 
-function findingNeighbors(arr, i, j) {
+const findingNeighbors = (arr, i, j) => {
   let row = arr.length -1;
   let col = arr[0].length -1;
 
@@ -96,32 +103,28 @@ function findingNeighbors(arr, i, j) {
   };
 }
 
-function createGridTwo() {
+const createGridTwo = (width, heigth) => {                            
   let newArray = [];
-  for (let i = 0; i < mat.length; i++) {
-    newArray.push(i);
+  for (let i = 0; i < width; i++) {
     newArray[i] = [];
     let trC = document.createElement('tr');
     tableCBody.appendChild(trC); {
-      for (let j = 0; j < mat[i].length; j++) {
-        newArray[i].push(j);
-        
-        let neib = findingNeighbors(mat, i, j);
-        let filt = neib.filter(el => el == 1)
-        let count = filt.reduce((count, acc) => count + acc);
+      for (let j = 0; j < heigth; j++) {
+        let neib = findingNeighbors(mat, i, j);    
+        let count = neib.reduce((count, acc) => count + acc); 
         if (mat[i][j] == 1) {
           if (count == 2 || count == 3) {
             newArray[i][j] = 1;
           } else {
             newArray[i][j] = 0;
-          }
-        }
+          };
+        };
         if (mat[i][j] == 0) {
           if (count == 3) {
             newArray[i][j] = 1;
           } else {
             newArray[i][j] = 0;
-          }
+          };
         };
         let tdC = document.createElement('td');
         tdC.innerHTML = newArray[i][j];
@@ -134,11 +137,59 @@ function createGridTwo() {
       };
     };
   };
+ 
   return newArray;
 }
+let matTwo = createGridTwo(width, heigth);
 
+
+const createGridThree = (arr) => {
+  let newArray = [];
+  for (let i = 0; i < arr.length; i++) {
+    newArray[i] = [];
+    let trB = document.createElement('tr');
+    tableBBody.appendChild(trB); {
+      for (let j = 0; j < arr[i]; j++) {
+        let neib = findingNeighbors(arr, i, j);
+        
+        let count = neib.reduce((count, acc) => count + acc)
+        if (arr[i][j] == 1) {
+          if (count == 2 || count == 3) {
+            newArray[i][j] = 1;
+          } else {
+            newArray[i][j] = 0;
+          };
+        };
+        if (arr[i][j] == 0) {
+          if (count == 3) {
+            newArray[i][j] = 1;
+          } else {
+            newArray[i][j] = 0;
+          };
+        };
+        let tdB = document.createElement('td');
+        tdB.innerHTML = newArray[i][j];
+        if (newArray[i][j] === 1) {
+          tdB.className = 'live';
+        } else {
+          tdB.className = 'die';
+        };
+        trB.appendChild(tdB);
+      };
+      
+    };
+  };
+  return newArray
+};
+let matThree = createGridThree(matTwo)
 console.log(mat)
-console.log(createGridTwo())
+console.log(matTwo)
+console.log(matThree)
 document.body.appendChild(table);
-document.body.appendChild(tableC)
+document.body.appendChild(tableC);
+document.body.appendChild(tableB);
 
+console.log(width);
+console.log(heigth)
+
+// setInterval(returnGrid, 1000);,
