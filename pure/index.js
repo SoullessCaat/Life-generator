@@ -1,93 +1,87 @@
-import {findingNeighbors} from './public/fingindNeighbors.js'
 import {returnValues} from './public/returningNeighbors.js'
-
-let table = document.createElement('table');
-let tableC = document.createElement('table');
-let tableBody = document.createElement('tbody');
-let tableCBody = document.createElement('tbody');
-table.appendChild(tableBody);
-tableC.appendChild(tableCBody);
-
 
 const width = 10;
 const heigth = 10;
 
-function createGrid(width, heigth) { 
-  let arr = []; 
+const createDefaulValuesBord = (width, heigth) => {
+  let arr = []
   for (let i = 0; i < width; i++) {
-    arr[i] = [];
-    let tr = document.createElement('tr');
-      tableBody.appendChild(tr); {
-        for (let j = 0; j < heigth; j++) {
-          arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
-          let td = document.createElement('td');
-          td.innerHTML = arr[i][j];
-          if (arr[i][j] === 1) {
-            td.className = 'live';
-          } else {
-            td.className = 'die';
-          };
-          tr.appendChild(td);
-      };
+    arr[i] = []
+    for (let j = 0; j < heigth; j++) {
+      arr[i][j] = Math.floor(Math.random() * (1 - 0 + 1) - 0);
     };
   };
-  return arr; 
+  return arr;
 };
 
 
-let arr = [
-  [1, 0, 1, 0, 1], 
-  [1, 1, 1, 1, 1], 
-  [0, 1, 0, 0, 0], 
-  [1, 1, 0, 0, 0]
-]
+const returnCount = (arr, i, j) => {
+  let c = returnValues(arr, i, j);
+  let count = c.reduce((count, acc) => count + acc);
 
+  return count;
+};
 
-
-let mat = createGrid(width, heigth);
-
-const createGridTwo = (width, heigth) => {                            
-  let newArray = [];
-  for (let i = 0; i < width; i++) {
-    newArray[i] = [];
-    let trC = document.createElement('tr');
-    tableCBody.appendChild(trC); {
-      for (let j = 0; j < heigth; j++) {
-        let neib = returnValues(mat, i, j);    
-        let count = neib.reduce((count, acc) => count + acc); 
-        if (mat[i][j] == 1) {
-          if (count == 2 || count == 3) {
-            newArray[i][j] = 1;
-          } else {
-            newArray[i][j] = 0;
-          };
-        };
-        if (mat[i][j] == 0) {
-          if (count == 3) {
-            newArray[i][j] = 1;
-          } else {
-            newArray[i][j] = 0;
-          };
-        };
-        let tdC = document.createElement('td');
-        tdC.innerHTML = newArray[i][j];
-        if (newArray[i][j] === 1) {
-          tdC.className = 'live';
+const updateValues = (arr) => {
+  let newArr = [];
+  for (let i = 0; i < arr.length; i++) {
+    newArr[i] = [];
+    for (let j = 0; j < arr[i].length; j++) {
+      let count = returnCount(arr, i, j);
+      if (arr[i][j] === 1) {
+        if (count == 3 || count == 2) {
+          newArr[i][j] = 1;
         } else {
-          tdC.className = 'die';
+          newArr[i][j] = 0;
         }
-        trC.appendChild(tdC);
+      } 
+      if (arr[i][j] == 0) {
+        if (count == 3) {
+          newArr[i][j] = 1;
+        } else {
+          newArr[i][j] = 0;
+        }
+      };
+    }
+  }
+  return newArr;
+};
+
+let defaultBoard = createDefaulValuesBord(width, heigth);
+let updateBoard = updateValues(defaultBoard);
+
+
+const createBoard = (arr) => {
+  let div = document.createElement('div');
+  let table = document.createElement('table');
+  div.appendChild(table);
+  let tableBody = document.createElement('tbody');
+  table.appendChild(tableBody);
+  document.body.appendChild(table);
+
+  for (let i = 0; i < arr.length; i++) {
+    let tr = document.createElement('tr');
+    tableBody.appendChild(tr); {
+      for (let j = 0; j < arr[i].length; j++) {
+        let td = document.createElement('td');
+        td.innerHTML = arr[i][j];
+        if (arr[i][j] === 1) {
+          td.className = 'live';
+        } else {
+          td.className = 'die';
+        };
+        tr.appendChild(td);
       };
     };
   };
- 
-  return newArray;
-}
-let matTwo = createGridTwo(width, heigth);
+  return arr;
+};
 
+createBoard(defaultBoard);
 
+let up = setTimeout(function update() {
+    createBoard(updateBoard)
+    updateBoard = updateValues(updateBoard);
+    up = setTimeout(update, 1000) 
+}, 1000)
 
-console.log(mat)
-console.log(matTwo)
-document.body.appendChild(table);
-document.body.appendChild(tableC);

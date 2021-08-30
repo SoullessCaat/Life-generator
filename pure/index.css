@@ -1,6 +1,6 @@
-body {
-    display: flex;
-    justify-content: space-evenly;
+table {
+    display: inline-table;
+    margin-right: 100px;
 }
 
 table, 
@@ -10,7 +10,6 @@ td
     border-collapse: collapse;
     padding: 8px 14px;
 }
-
 
 .die {
     background: white;
