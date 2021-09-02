@@ -1,4 +1,6 @@
 import {returnValues} from './public/returningNeighbors.js'
+let div = document.createElement('div');
+let table = document.getElementsByTagName('table');
 
 const width = 10;
 const heigth = 10;
@@ -52,13 +54,12 @@ let updateBoard = updateValues(defaultBoard);
 
 
 const createBoard = (arr) => {
-  let div = document.createElement('div');
   let table = document.createElement('table');
   div.appendChild(table);
   let tableBody = document.createElement('tbody');
   table.appendChild(tableBody);
   document.body.appendChild(table);
-
+  
   for (let i = 0; i < arr.length; i++) {
     let tr = document.createElement('tr');
     tableBody.appendChild(tr); {
@@ -78,10 +79,15 @@ const createBoard = (arr) => {
 };
 
 createBoard(defaultBoard);
+createBoard(updateBoard);
 
 let up = setTimeout(function update() {
+  table[1].parentNode.removeChild(table[1])
+  updateBoard = updateValues(updateBoard);
+  setTimeout(() => {
     createBoard(updateBoard)
-    updateBoard = updateValues(updateBoard);
-    up = setTimeout(update, 1000) 
+    console.time()
+    console.timeEnd()
+  }, 0)
+  up = setTimeout(update, 2000) 
 }, 1000)
-
